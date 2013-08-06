@@ -392,6 +392,8 @@ def signin(request, auth_form=AuthenticationForm,
     """
     form = auth_form()
 
+    request.breadcrumbs((('Home', reverse('index')), ('Sign in', '')))
+
     if request.method == 'POST':
         form = auth_form(request.POST, request.FILES)
         if form.is_valid():
@@ -422,6 +424,7 @@ def signin(request, auth_form=AuthenticationForm,
     extra_context.update({
         'form': form,
         'next': request.REQUEST.get(redirect_field_name),
+        'page': 'signin',
     })
     return ExtraContextTemplateView.as_view(template_name=template_name,
                                             extra_context=extra_context)(request)
