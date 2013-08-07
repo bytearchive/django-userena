@@ -113,6 +113,8 @@ def signup(request, signup_form=SignupForm,
 
     form = signup_form()
 
+    request.breadcrumbs((('Home', reverse('index')), ('Register', '')))
+
     if request.method == 'POST':
         form = signup_form(request.POST, request.FILES)
         if form.is_valid():

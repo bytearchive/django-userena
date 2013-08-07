@@ -15,7 +15,7 @@ import random
 
 attrs_dict = {'class': 'required'}
 
-USERNAME_RE = r'^[\.\w]+$'
+USERNAME_RE = r'^[a-zA-Z0-9_-]+$'
 
 class SignupForm(forms.Form):
     """
@@ -26,7 +26,8 @@ class SignupForm(forms.Form):
 
     """
     username = forms.RegexField(regex=USERNAME_RE,
-                                max_length=30,
+                                max_length=15,
+                                min_length=3,
                                 widget=forms.TextInput(attrs=attrs_dict),
                                 label=_("Username"),
                                 error_messages={'invalid': _('Username must contain only letters, numbers, dots and underscores.')})
