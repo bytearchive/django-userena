@@ -142,6 +142,7 @@ def signup(request, signup_form=SignupForm,
 
     if not extra_context: extra_context = dict()
     extra_context['form'] = form
+    extra_context['page'] = 'signup'
     return ExtraContextTemplateView.as_view(template_name=template_name,
                                             extra_context=extra_context)(request)
 
