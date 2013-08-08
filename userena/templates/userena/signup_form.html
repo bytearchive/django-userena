@@ -1,7 +1,7 @@
 {% extends 'userena/base_userena.html' %}
 {% load i18n %}
 
-{% block title %}{% trans "Register" %}{% endblock %}
+{% block title %}{% trans "Register an account" %}{% endblock %}
 
 {% block js %}{% load staticfiles %}<script src="{% static 'js/bindWithDelay.js' %}"></script>{% endblock %}
 
@@ -131,7 +131,7 @@ $(function() {
     <form action="" method="post" class="form-horizontal" id="registration">
       {% csrf_token %}
       <fieldset>
-        <legend>{% trans "Register" %}</legend>
+        <legend>{% trans "Register an account" %}</legend>
         {% if form.non_field_errors %}
           <div class="form-group">
             <div class="col-sm-12 col-lg-12">
