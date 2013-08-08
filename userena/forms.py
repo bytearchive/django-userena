@@ -30,7 +30,7 @@ class SignupForm(forms.Form):
                                 min_length=3,
                                 widget=forms.TextInput(attrs=attrs_dict),
                                 label=_("Username"),
-                                error_messages={'invalid': _('Username must contain only letters, numbers, dots and underscores.')})
+                                error_messages={'invalid': _('Username must contain only letters, numbers, dashes and underscores.')})
     email = forms.EmailField(widget=forms.TextInput(attrs=dict(attrs_dict,
                                                                maxlength=75)),
                              label=_("Email"))
