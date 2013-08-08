@@ -37,8 +37,17 @@ $(function() {
       parent.parent().addClass('has-error');
       parent.next().html('<i class="icon-remove"></i> Username\'s length has to be less than 15 characters.');
     } else {
-      parent.parent().addClass('has-success');
-      parent.next().html('<i class="icon-ok"></i>');
+      $.ajax({
+        url: 'http://127.0.0.1:8000/api/username_available/' + value + '/'
+      }).done(function(data) {
+        if (data.available) {
+          parent.parent().addClass('has-success');
+          parent.next().html('<i class="icon-ok"></i>');
+        } else {
+          parent.parent().addClass('has-error');
+          parent.next().html('<i class="icon-remove"></i> The username is already taken.');
+        }
+      });
     }
   }, 500);
 
