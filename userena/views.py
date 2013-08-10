@@ -42,9 +42,13 @@ class ProfileListView(ListView):
     """ Lists all profiles """
     context_object_name='profile_list'
     page=1
-    paginate_by=50
+    paginate_by=3
     template_name=userena_settings.USERENA_PROFILE_LIST_TEMPLATE
     extra_context=None
+
+    def get(self, request, *args, **kwargs):
+        request.breadcrumbs((('Home', reverse('index')), ('Profile list', '')))
+        return ListView.get(self, request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
@@ -63,6 +67,7 @@ class ProfileListView(ListView):
         context['page'] = page
         context['paginate_by'] = self.paginate_by
         context['extra_context'] = self.extra_context
+        context['current_page'] = 'members'
 
         return context
 
@@ -142,7 +147,7 @@ def signup(request, signup_form=SignupForm,
 
     if not extra_context: extra_context = dict()
     extra_context['form'] = form
-    extra_context['page'] = 'signup'
+    extra_context['current_page'] = 'signup'
     return ExtraContextTemplateView.as_view(template_name=template_name,
                                             extra_context=extra_context)(request)
 
@@ -427,7 +432,7 @@ def signin(request, auth_form=AuthenticationForm,
     extra_context.update({
         'form': form,
         'next': request.REQUEST.get(redirect_field_name),
-        'page': 'signin',
+        'current_page': 'signin',
     })
     return ExtraContextTemplateView.as_view(template_name=template_name,
                                             extra_context=extra_context)(request)
@@ -498,6 +503,12 @@ def email_change(request, username, email_form=ChangeEmailForm,
     """
     user = get_object_or_404(get_user_model(), username__iexact=username)
 
+    request.breadcrumbs((
+        ('Home', reverse('index')),
+        ('{}\'s profile'.format(user.username), reverse('userena_profile_detail', args=[user.username])),
+        ('Change email address', ''),
+    ))
+
     form = email_form(user)
 
     if request.method == 'POST':
@@ -561,6 +572,12 @@ def password_change(request, username, template_name='userena/password_form.html
     """
     user = get_object_or_404(get_user_model(),
                              username__iexact=username)
+
+    request.breadcrumbs((
+        ('Home', reverse('index')),
+        ('{}\'s profile'.format(user.username), reverse('userena_profile_detail', args=[user.username])),
+        ('Change password', ''),
+    ))
 
     form = pass_form(user=user)
 
@@ -632,6 +649,12 @@ def profile_edit(request, username, edit_profile_form=EditProfileForm,
     user = get_object_or_404(get_user_model(),
                              username__iexact=username)
 
+    request.breadcrumbs((
+        ('Home', reverse('index')),
+        ('{}\'s profile'.format(user.username), reverse('userena_profile_detail', args=[user.username])),
+        ('Edit profile', ''),
+    ))
+
     profile = user.get_profile()
 
     user_initial = {'first_name': user.first_name,
@@ -690,6 +713,8 @@ def profile_detail(request, username,
         profile = user.get_profile()
     except profile_model.DoesNotExist:
         profile = profile_model.objects.create(user=user)
+
+    request.breadcrumbs((('Home', reverse('index')), ('{}\'s profile'.format(user.username), '')))
 
     if not profile.can_view_profile(request.user):
         return HttpResponseForbidden(_("You don't have permission to view this profile."))

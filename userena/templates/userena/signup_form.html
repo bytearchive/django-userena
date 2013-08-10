@@ -1,7 +1,8 @@
 {% extends 'userena/base_userena.html' %}
 {% load i18n %}
+{% load page_title %}
 
-{% block title %}{% trans "Register an account" %}{% endblock %}
+{% block title %}{% trans "Register an account"|page_title %}{% endblock %}
 
 {% block js %}{% load staticfiles %}<script src="{% static 'js/bindWithDelay.js' %}"></script>{% endblock %}
 
@@ -157,7 +158,7 @@ $(function() {
           <div class="col-sm-5 col-lg-5">
             <input id="id_email" class="form-control" type="email" name="email" maxlength="75" value="{{ form.email.value|default_if_none:"" }}">
           </div>
-          <p id="email_errors" class="col-sm-5 col-lg-5 col-lg-2 help-block">
+          <p id="email_errors" class="col-sm-5 col-lg-5 help-block">
           {% for error in form.email.errors %}
             <i class="icon-exclamation"></i> {{ error }}{% if not forloop.last %} , {% endif %}
           {% endfor %}
@@ -186,9 +187,7 @@ $(function() {
           </p>
         </div>
         <div class="form-group" id="password1">
-          <div class="col-sm-2">
-          </div>
-          <div class="col-sm-5">
+          <div class="col-sm-5 col-lg-5 col-sm-offset-2 col-lg-offset-2">
             <input type="submit" value="{% trans "Signup"%}" class="btn btn-primary" />
           </div>
         </div>
